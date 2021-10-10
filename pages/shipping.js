@@ -45,6 +45,7 @@ export default function Shipping() {
                 name: shippingDetails.name,
                 address: shippingDetails.address,
                 city: shippingDetails.city,
+                state: shippingDetails.state,
                 country: shippingDetails.country,
                 pinCode: shippingDetails.pinCode,
             }));
