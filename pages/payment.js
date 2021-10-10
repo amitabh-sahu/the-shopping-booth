@@ -72,9 +72,9 @@ export default function Payment() {
                                 Shipping Details:
                             </Typography>
                             <Typography variant="h6" component="p">
-                                {shippingDetails.name}<br />
-                                {`${shippingDetails.address}, ${shippingDetails.city}, ${shippingDetails.state}, ${shippingDetails.country}`}
-                                <br />{shippingDetails.pinCode}
+                                {shippingDetails?.name}<br />
+                                {`${shippingDetails?.address}, ${shippingDetails?.city}, ${shippingDetails?.state}, ${shippingDetails?.country}`}
+                                <br />{shippingDetails?.pinCode}
                             </Typography>
                         </Box>
                     </CardContent>

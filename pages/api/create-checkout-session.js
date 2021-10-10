@@ -2,7 +2,7 @@ import stripe from 'stripe';
 
 const stripeCon = stripe(process.env.STRIPE_SECRET_KEY);
 
-export default async (req, res) => {
+const createCheckoutSession = async (req, res) => {
     const { items, email } = req.body;
     const tranformedItems = items.map((item) => ({
         price_data: {
@@ -23,8 +23,8 @@ export default async (req, res) => {
         },
         line_items: tranformedItems,
         mode: 'payment',
-        success_url: `http://localhost:3000/success`,
-        cancel_url: `http://localhost:3000/payment`,
+        success_url: `${process.env.HOST}/success`,
+        cancel_url: `${process.env.HOST}/payment`,
         metadata: {
             email: email,
             images: JSON.stringify(items.map((item) => item.image)),
@@ -32,3 +32,5 @@ export default async (req, res) => {
     });
     res.status(200).json(session);
 };
+
+export default createCheckoutSession;
