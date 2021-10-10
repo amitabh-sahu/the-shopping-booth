@@ -1,8 +1,10 @@
 import stripe from 'stripe';
+import nc from 'next-connect';
 
+const handler = nc();
 const stripeCon = stripe(process.env.STRIPE_SECRET_KEY);
 
-const createCheckoutSession = async (req, res) => {
+handler.post(async (req, res) => {
     const { items, email } = req.body;
     const tranformedItems = items.map((item) => ({
         price_data: {
@@ -31,6 +33,6 @@ const createCheckoutSession = async (req, res) => {
         }
     });
     res.status(200).json(session);
-};
+});
 
-export default createCheckoutSession;
+export default handler;
