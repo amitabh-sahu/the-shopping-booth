@@ -5,6 +5,7 @@ import Avatar from '@mui/material/Avatar';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import LogoutIcon from '@mui/icons-material/Logout';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import { LOGOUT_USER } from '../utils/constants';
 import { Store } from '../utils/Store';
@@ -38,6 +39,12 @@ export default function UserMenu({ userInfo }) {
                 }}
                 sx={{ width: 200 }}
             >
+                <MenuItem onClick={() => router.push('/orders')}>
+                    <ListItemIcon sx={{ color: '#d32f2f' }}>
+                        <ReceiptIcon />
+                    </ListItemIcon>
+                    My Orders
+                </MenuItem>
                 <MenuItem onClick={logoutHandler}>
                     <ListItemIcon sx={{ color: '#d32f2f' }}>
                         <LogoutIcon />

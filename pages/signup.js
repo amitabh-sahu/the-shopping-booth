@@ -153,7 +153,7 @@ export default function SignUp() {
                         <Grid item>
                             <Typography>
                                 Already have an account?{' '}
-                                <Nextlink href="/signin" passHref>
+                                <Nextlink href={redirect ? `/signin?redirect=${redirect}` : '/signin'} passHref>
                                     <Link underline="hover" style={{ cursor: 'pointer' }}>
                                         Sign In
                                     </Link>

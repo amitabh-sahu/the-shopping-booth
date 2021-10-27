@@ -5,7 +5,7 @@ const handler = nc();
 const stripeCon = stripe(process.env.STRIPE_SECRET_KEY);
 
 handler.post(async (req, res) => {
-    const { items, email } = req.body;
+    const { items, userId } = req.body;
     const tranformedItems = items.map((item) => ({
         price_data: {
             currency: 'INR',
@@ -25,14 +25,14 @@ handler.post(async (req, res) => {
         },
         line_items: tranformedItems,
         mode: 'payment',
-        success_url: `${process.env.HOST}/success`,
+        success_url: `${process.env.HOST}/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.HOST}/payment`,
         metadata: {
-            email: email,
+            userId: userId,
             images: JSON.stringify(items.map((item) => item.image)),
         }
     });
-    res.status(200).json(session);
+    res.status(200).json({ id: session.id });
 });
 
 export default handler;

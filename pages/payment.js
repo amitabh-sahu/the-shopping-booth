@@ -11,7 +11,6 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import { CLEAR_CART } from '../utils/constants';
 import MuiTheme from '../components/MuiTheme';
 import Stepper from '../components/Stepper';
 import Layout from '../components/Layout';
@@ -19,14 +18,13 @@ import { Store } from '../utils/Store';
 import axios from 'axios';
 
 export default function Payment() {
-    const { state: { cart: { cartItems, shippingDetails }, userInfo }, dispatch } = useContext(Store);
+    const { state: { cart: { cartItems, shippingDetails }, userInfo } } = useContext(Store);
     const paymentHandler = async () => {
         const stripe = await loadStripe(process.env.stripe_public_key);
         const checkoutSession = await axios.post('/api/create-checkout-session', {
-            email: userInfo.result.email,
+            userId: userInfo.result.id,
             items: cartItems,
         });
-        dispatch({ type: CLEAR_CART });
         const result = await stripe.redirectToCheckout({ sessionId: checkoutSession.data.id });
         if (result.error) {
             alert(result.error.message);

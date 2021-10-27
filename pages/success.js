@@ -1,11 +1,19 @@
 import Image from 'next/image';
 import Nextlink from 'next/link';
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Layout from '../components/Layout';
+import { CLEAR_CART } from '../utils/constants';
+import { useEffect } from 'react';
 
 export default function Payment() {
+    const { dispatch } = useContext(Store);
+    useEffect(() => {
+        dispatch({ type: CLEAR_CART });
+    }, [])
+
     return (
         <Layout title={'Order Placed | The Shopping Booth'}>
             <Card sx={{
@@ -21,9 +29,14 @@ export default function Payment() {
                 <Typography variant="h6" component="p">
                     Your order has been placed successfully. Thank you for shopping with us.
                 </Typography>
-                <Nextlink href="/" passRef>
-                    <Button variant="outlined" color="inherit">Shop More</Button>
-                </Nextlink>
+                <Box>
+                    <Nextlink href="/" passRef>
+                        <Button variant="outlined" color="inherit" sx={{ mx: 1 }}>Shop More</Button>
+                    </Nextlink>
+                    <Nextlink href="/orders" passRef>
+                        <Button variant="outlined" color="inherit" sx={{ mx: 1 }}>My Orders</Button>
+                    </Nextlink>
+                </Box>
             </Card>
         </Layout >
     );
