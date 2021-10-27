@@ -1,12 +1,13 @@
+import { useContext, useEffect } from 'react';
 import Image from 'next/image';
 import Nextlink from 'next/link';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Layout from '../components/Layout';
 import { CLEAR_CART } from '../utils/constants';
-import { useEffect } from 'react';
+import Layout from '../components/Layout';
+import { Store } from '../utils/Store';
 
 export default function Payment() {
     const { dispatch } = useContext(Store);

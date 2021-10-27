@@ -25,7 +25,7 @@ handler.post(async (req, res) => {
         },
         line_items: tranformedItems,
         mode: 'payment',
-        success_url: `${process.env.HOST}/success?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${process.env.HOST}/success`,
         cancel_url: `${process.env.HOST}/payment`,
         metadata: {
             userId: userId,
