@@ -105,7 +105,7 @@ export default function Cart() {
                 </Container>
             ) : (
                 <Container maxWidth="lg" sx={{ display: 'grid', placeItems: 'center', gap: 2, py: 2, mx: 'auto', my: '10vh' }}>
-                    <Image src="/empty-cart.png" alt={`empty cart image`} width={128} height={128} objectFit="contain" />
+                    <Image src="/empty-cart.png" alt="empty cart image" width={128} height={128} objectFit="contain" />
                     <Typography variant="h6" component="p">
                         There is nothing in your cart. Let&apos;s add some items.
                     </Typography>

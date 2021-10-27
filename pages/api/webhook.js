@@ -20,7 +20,7 @@ const fulfillOrder = async (session) => {
             total: session.amount_total / 100,
         },
         itemsImg: JSON.parse(session.metadata.images),
-        timeStamp: new Date(),
+        orderDate: new Date(),
     };
     await db.connect();
     const user = await User.findById(session.metadata.userId);
