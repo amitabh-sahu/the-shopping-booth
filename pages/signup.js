@@ -15,11 +15,13 @@ import { Store } from '../utils/Store';
 import Layout from '../components/Layout';
 import MuiTheme from '../components/MuiTheme';
 import { AUTH_USER } from '../utils/constants';
+import useLoader from '../hooks/useLoader';
 
 export default function SignUp() {
     const router = useRouter();
     const { redirect } = router.query;
     const { dispatch } = useContext(Store);
+    const [loader, showLoader, hideLoader] = useLoader();
     const [values, setValues] = useState({
         firstName: '',
         lastName: '',
@@ -36,6 +38,7 @@ export default function SignUp() {
     };
     const handleSubmit = async (event) => {
         event.preventDefault();
+        showLoader();
         try {
             const { data } = await axios.post('/api/users/signup', values);
             dispatch({ type: AUTH_USER, payload: data });
@@ -51,6 +54,7 @@ export default function SignUp() {
         } catch (err) {
             alert(err.message);
         }
+        hideLoader();
     };
 
     return (
@@ -66,7 +70,7 @@ export default function SignUp() {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
                     <MuiTheme>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
@@ -139,7 +143,7 @@ export default function SignUp() {
                         endIcon={values.showPassword ? <VisibilityOff /> : <Visibility />}>
                         Show
                     </Button>
-                    <Button type="submit" fullWidth variant="contained" sx={{ my: 2 }}>
+                    <Button type="submit" fullWidth variant="contained" sx={{ mt: 1, mb: 2 }}>
                         Sign Up
                     </Button>
                     <Grid container>
@@ -162,6 +166,7 @@ export default function SignUp() {
                         </Grid>
                     </Grid>
                 </Box>
+                {loader}
             </Card>
         </Layout>
     );

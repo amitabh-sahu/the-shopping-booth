@@ -12,23 +12,27 @@ import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 import axios from 'axios';
 import moment from 'moment';
+import useLoader from '../hooks/useLoader';
 
 export default function Orders() {
     const router = useRouter();
     const [orders, setorders] = useState([]);
     const { state: { userInfo } } = useContext(Store);
+    const [loader, showLoader, hideLoader] = useLoader();
 
     useEffect(() => {
         if (!userInfo) {
             router.push('/signin');
         }
         const fetchOrders = async () => {
+            showLoader();
             try {
                 const { data } = await axios.get(`/api/orders/${userInfo.result.id}`)
                 setorders(data);
             } catch (err) {
                 console.log(err.message);
             }
+            hideLoader();
         };
         fetchOrders();
     }, []);
@@ -79,6 +83,7 @@ export default function Orders() {
                     </Nextlink>
                 </Container>
             )}
+            {loader}
         </Layout >
     );
 }

@@ -16,16 +16,20 @@ import Stepper from '../components/Stepper';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 import axios from 'axios';
+import useLoader from '../hooks/useLoader';
 
 export default function Payment() {
     const { state: { cart: { cartItems, shippingDetails }, userInfo } } = useContext(Store);
+    const [loader, showLoader, hideLoader] = useLoader();
     const paymentHandler = async () => {
+        showLoader();
         const stripe = await loadStripe(process.env.stripe_public_key);
         const checkoutSession = await axios.post('/api/create-checkout-session', {
             userId: userInfo.result.id,
             items: cartItems,
         });
         const result = await stripe.redirectToCheckout({ sessionId: checkoutSession.data.id });
+        hideLoader();
         if (result.error) {
             alert(result.error.message);
         }
@@ -88,6 +92,7 @@ export default function Payment() {
                         </Button>
                     </CardActions>
                 </Card>
+                {loader}
             </Container>
         </Layout >
     );

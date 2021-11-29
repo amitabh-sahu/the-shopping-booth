@@ -19,17 +19,31 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Store } from '../utils/Store';
 import Layout from '../components/Layout';
 import MuiTheme from '../components/MuiTheme';
-import { AUTH_USER } from '../utils/constants';
+import { AUTH_USER, SHIPPING_DETAILS } from '../utils/constants';
+import useLoader from '../hooks/useLoader';
 
 export default function SingIn() {
     const router = useRouter();
     const { redirect } = router.query;
     const { dispatch } = useContext(Store);
+    const [loader, showLoader, hideLoader] = useLoader();
     const [values, setValues] = useState({
         email: '',
         password: '',
         showPassword: false,
     });
+    const guest = {
+        email: 'guest@theshoppingbooth.com',
+        password: 'guestlogin',
+        sipping: {
+            name: 'Guest',
+            address: 'Purani Basti',
+            city: 'Raipur',
+            state: 'Chhatiisgarh',
+            country: 'India',
+            pinCode: '492001',
+        },
+    };
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
     };
@@ -41,6 +55,7 @@ export default function SingIn() {
     };
     const handleSubmit = async (event) => {
         event.preventDefault();
+        showLoader();
         try {
             const { data } = await axios.post('/api/users/signin', values);
             dispatch({ type: AUTH_USER, payload: data });
@@ -53,6 +68,19 @@ export default function SingIn() {
         } catch (err) {
             alert(err.message);
         }
+        hideLoader();
+    };
+    const handleGuestLogin = async () => {
+        showLoader();
+        try {
+            const { data } = await axios.post('/api/users/signin', guest);
+            dispatch({ type: SHIPPING_DETAILS, payload: guest.sipping });
+            await dispatch({ type: AUTH_USER, payload: data });
+            router.push(redirect || '/');
+        } catch (err) {
+            alert(err.message);
+        }
+        hideLoader();
     };
 
     return (
@@ -68,7 +96,7 @@ export default function SingIn() {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                <Box component="form" onSubmit={handleSubmit}>
                     <MuiTheme>
                         <TextField
                             margin="normal"
@@ -108,9 +136,14 @@ export default function SingIn() {
                             />
                         </FormControl>
                     </MuiTheme>
-                    <Button type="submit" fullWidth variant="contained" sx={{ my: 3 }}>
-                        Sign In
-                    </Button>
+                    <Box sx={{ display: 'grid', gap: 1, mt: 1, mb: 2 }}>
+                        <Button type="submit" fullWidth variant="contained">
+                            Sign In
+                        </Button>
+                        <Button variant="contained" fullWidth onClick={handleGuestLogin}>
+                            Visit as Guest
+                        </Button>
+                    </Box>
                     <Grid container>
                         <Grid item xs>
                             <Nextlink href="/" passHref>
@@ -131,6 +164,7 @@ export default function SingIn() {
                         </Grid>
                     </Grid>
                 </Box>
+                {loader}
             </Card>
         </Layout>
     );

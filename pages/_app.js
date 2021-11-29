@@ -1,8 +1,15 @@
-import Head from 'next/head'
-import '../styles/globals.css'
-import { StoreProvider } from '../utils/Store'
+import Head from 'next/head';
+import Router from 'next/router';
+import '../styles/globals.css';
+import { StoreProvider } from '../utils/Store';
+import useLoader from '../hooks/useLoader';
 
 function MyApp({ Component, pageProps }) {
+  const [loader, showLoader, hideLoader] = useLoader();
+  Router.events.on('routeChangeStart', () => showLoader());
+  Router.events.on('routeChangeComplete', () => hideLoader());
+  Router.events.on('routeChangeError', () => hideLoader());
+
   return (
     <>
       <Head>
@@ -21,6 +28,7 @@ function MyApp({ Component, pageProps }) {
         <link rel="manifest" href="/manifest.webmanifest"></link>
       </Head>
       <StoreProvider>
+        {loader}
         <Component {...pageProps} />
       </StoreProvider>
     </>

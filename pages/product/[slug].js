@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import Nextlink from 'next/link';
@@ -16,11 +16,16 @@ import { Store } from '../../utils/Store';
 import { CART_ADD_ITEM } from '../../utils/constants';
 
 export default function Product({ product }) {
-    let [btnToCart, setBtnToCart] = useState(false);
-    const { dispatch } = useContext(Store);
+    const { dispatch, state: { cart: { cartItems } } } = useContext(Store);
+    const [btnToCart, setBtnToCart] = useState(false);
+    useEffect(() => {
+        const found = cartItems.find((ele) => ele.id === product.id);
+        if (found) {
+            setBtnToCart(true);
+        }
+    }, [cartItems])
     const addToCartHandler = () => {
         dispatch({ type: CART_ADD_ITEM, payload: { ...product } });
-        setBtnToCart(!btnToCart);
     };
     return (
         <Layout title={product.title}>

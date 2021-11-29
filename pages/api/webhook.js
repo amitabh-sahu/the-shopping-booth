@@ -48,7 +48,7 @@ const webhookHandler = async (request, response) => {
             default:
                 console.log(`Unhandled event type ${event.type}`);
         }
-        response.send();
+        response.status(200).send('Webhook');
     }
 };
 
